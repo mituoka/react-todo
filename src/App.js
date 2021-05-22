@@ -3,11 +3,8 @@ import "./styles.css";
 
 const App = () => {
   const [taskName, setTask] = useState("");
-  const [incompleteTodos, setincompleteTodos] = useState([
-    "ああああ",
-    "いいいい"
-  ]);
-  const [completeTodos, setcompleteTodos] = useState(["a3", "a4"]);
+  const [incompleteTodos, setincompleteTodos] = useState([]);
+  const [completeTodos, setcompleteTodos] = useState([]);
   const onChangeTodoText = (event) => {
     setTask(event.target.value);
   };
@@ -26,9 +23,17 @@ const App = () => {
   const completeTask = (index) => {
     const newIncompleateTodo = [...incompleteTodos];
     newIncompleateTodo.splice(index, 1);
-    const newCompleateTodo = [...completeTodos, completeTodos[index]];
+    const newCompleateTodo = [...completeTodos, incompleteTodos[index]];
     setincompleteTodos(newIncompleateTodo);
     setcompleteTodos(newCompleateTodo);
+  };
+
+  const backTask = (index) => {
+    const newCompleateTodo = [...completeTodos];
+    newCompleateTodo.splice(index, 1);
+    const newIncompleateTodo = [...incompleteTodos, completeTodos[index]];
+    setcompleteTodos(newCompleateTodo);
+    setincompleteTodos(newIncompleateTodo);
   };
 
   return (
@@ -64,7 +69,7 @@ const App = () => {
             return (
               <div key={index} className="list_row">
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button onClick={() => backTask(index)}>戻す</button>
               </div>
             );
           })}
