@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./styles.css";
+import { InputTodo } from "./components/InputTodo";
+import { IncompleteArea } from "./components/IncompleteArea";
+import { CompleteArea } from "./components/CompleteArea";
 
 const App = () => {
   const [taskName, setTask] = useState("");
@@ -38,43 +41,21 @@ const App = () => {
 
   return (
     <>
-      <div className="input-area">
-        <input
-          type="text"
-          placeholder="TODO"
-          value={taskName}
-          onChange={onChangeTodoText}
-        />
-        <button onClick={registTask}>登録</button>
-      </div>
-      <div className="incomplete-area ">
-        <p>完了タスク</p>
-        <ul>
-          {incompleteTodos.map((todo, index) => {
-            return (
-              <div key={index} className="list_row">
-                <li>{todo}</li>
-                <button onClick={() => completeTask(index)}>完了</button>
-                {/* 関数に値を渡してあげる時はアロー関数で呼び出してあげる必要がある */}
-                <button onClick={() => taskDelete(index)}>削除</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="complete-area">
-        <p>未完了タスク</p>
-        <ul>
-          {completeTodos.map((todo, index) => {
-            return (
-              <div key={index} className="list_row">
-                <li>{todo}</li>
-                <button onClick={() => backTask(index)}>戻す</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
+      <InputTodo
+        taskName={taskName}
+        onChange={onChangeTodoText}
+        onClick={registTask}
+        disabled={incompleteTodos.length >= 5}
+      />
+      {incompleteTodos.length >= 5 && (
+        <p style={{ color: "red" }}>エラーメッセージ</p>
+      )}
+      <IncompleteArea
+        incompleteTodos={incompleteTodos}
+        completeTask={completeTask}
+        taskDelete={taskDelete}
+      />
+      <CompleteArea completeTodos={completeTodos} onClick={backTask} />
     </>
   );
 };
